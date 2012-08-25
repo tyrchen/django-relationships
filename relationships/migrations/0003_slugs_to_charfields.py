@@ -94,11 +94,11 @@ class Migration:
         'relationships.relationship': {
             'Meta': {'unique_together': "(('from_user', 'to_user', 'status'),)"},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'from_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'from_users'", 'to': "orm['auth.User']"}),
+            'from_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'from_friends'", 'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'site': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['sites.Site']"}),
             'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['relationships.RelationshipStatus']"}),
-            'to_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'to_users'", 'to': "orm['auth.User']"})
+            'to_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'to_friends'", 'to': "orm['auth.User']"})
         },
         'relationships.relationshipstatus': {
             'from_slug': ('django.db.models.fields.CharField', [], {'max_length': '100'}),

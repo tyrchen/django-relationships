@@ -2,6 +2,8 @@
 django-relationships
 ====================
 
+Change from_users/to_users so that it will not clash with userena.umessage.
+
 Descriptive relationships between auth.users::
 
     In [4]: john.relationships.friends()

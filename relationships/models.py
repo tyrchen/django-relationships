@@ -50,9 +50,9 @@ class RelationshipStatus(models.Model):
 
 class Relationship(models.Model):
     from_user = models.ForeignKey(User,
-        related_name='from_users', verbose_name=_('from user'))
+        related_name='from_friends', verbose_name=_('from user'))
     to_user = models.ForeignKey(User,
-        related_name='to_users', verbose_name=_('to user'))
+        related_name='to_friends', verbose_name=_('to user'))
     status = models.ForeignKey(RelationshipStatus, verbose_name=_('status'))
     created = models.DateTimeField(_('created'), auto_now_add=True)
     weight = models.FloatField(_('weight'), default=1.0, blank=True, null=True)
@@ -129,16 +129,16 @@ class RelationshipManager(User._default_manager.__class__):
     
     def _get_from_query(self, status):
         return dict(
-            to_users__from_user=self.instance,
-            to_users__status=status,
-            to_users__site__pk=settings.SITE_ID,
+            to_friends__from_user=self.instance,
+            to_friends__status=status,
+            to_friends__site__pk=settings.SITE_ID,
         )
     
     def _get_to_query(self, status):
         return dict(
-            from_users__to_user=self.instance,
-            from_users__status=status,
-            from_users__site__pk=settings.SITE_ID
+            from_friends__to_user=self.instance,
+            from_friends__status=status,
+            from_friends__site__pk=settings.SITE_ID
         )
     
     def get_relationships(self, status, symmetrical=False):
@@ -184,23 +184,23 @@ class RelationshipManager(User._default_manager.__class__):
         users.  An optional :class:`RelationshipStatus` instance can be specified.
         """
         query = dict(
-            to_users__from_user=self.instance,
-            to_users__to_user=user,
-            to_users__site__pk=settings.SITE_ID,
+            to_friends__from_user=self.instance,
+            to_friends__to_user=user,
+            to_friends__site__pk=settings.SITE_ID,
         )
         
         if status:
-            query.update(to_users__status=status)
+            query.update(to_friends__status=status)
         
         if symmetrical:
             query.update(
-                from_users__to_user=self.instance,
-                from_users__from_user=user,
-                from_users__site__pk=settings.SITE_ID
+                from_friends__to_user=self.instance,
+                from_friends__from_user=user,
+                from_friends__site__pk=settings.SITE_ID
             )
             
             if status:
-                query.update(from_users__status=status)
+                query.update(from_friends__status=status)
 
         return User.objects.filter(**query).exists()
 
